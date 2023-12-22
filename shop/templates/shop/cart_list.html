@@ -1,0 +1,111 @@
+{% extends 'index.html' %}
+
+{% block content %}
+    <a href="{% url 'ShopHome' %}"><i  style="color: rgb(0, 0, 0); position: relative; left: 2vw ;top: 10px ; cursor: pointer; ;font-size: 2rem ;border: 1px solid rgb(255, 255, 255);" class="fa-solid fa-arrow-left"></i> <!-- Section--></a>
+    {% if cart_items %}
+        <div class="container" style="width: 100vw;position: relative;top: 6vh ;height: 900px; display: flex; justify-content: center;" >
+            <div class="conatiner_box width" style="display: flex; width: 100%;gap: 10px;">
+                <div class="left_div" style="width: 80%;">
+                    <div class="left_top1" style="width: 100%; border: 1px solid #e5e5e5; padding: 20px; border-radius: 10px; background-color: #f8f8f8;">
+                        <h4 style="color: #333; font-size: 1.5rem; font-weight: bold;">Exclusive Benefits for Members</h4>
+                        <p style="color: #666; font-size: 1rem;">Unlock special perks by becoming a member. Enjoy fast and free delivery on all orders. Join us or sign in to experience the best shopping experience!</p>
+                    </div>
+                    <div class="left_top2">
+                        <h2>Bag</h2>
+                        <div class="product_item_adds_here" style="height: 50vh;overflow-y: scroll; padding: 10px;">
+                            {% for item in cart_items %}
+                            <div class="item1" style='height: 20vh;width: 100%;display: flex;'>
+                                <div class="info_left">
+                                    <img src="{{ item.image }}" alt="" style=" height: 120px; width: 120px;">
+                                </div>
+                                <div class="info_right" style="display: flex; justify-content: space-between; width: 100%;padding: 10px;">
+                                    <div class="info1_1">
+                                        <h6>{{item.product_name}}</h6>
+                                       <form method="post" id="delete_add_item1">{% csrf_token %}
+                                            <input type="text" name="product_name" class="product-name" value="{{item.product_name}}" hidden>
+                                            <p>Quantity: {{item.quantity}}</p>
+                                            <button type="submit" class="delete_icon" style="opacity: 1; background-color: #fff; border: none;">
+                                                <i class="fa-solid fa-trash"></i>
+                                            </button>
+                                        </form>
+                                    </div>
+                                    <div class="info1_2">
+                                        ${{item.total}}
+                                    </div>
+                                </div>
+                            </div>
+                            {% endfor %}
+                        </div>
+                    </div>
+                </div>
+                <div class="right_div" style="width: 40%; ">
+                    <div class="card">
+                        <div class="card-header">
+                            <h3>Summary</h3>
+                        </div>
+                        <div class="card-body">
+                            <h5 class="card-title">Subtotal</h5>
+                            <p class="card-text">Estimated Delivery & Handling: Free</p>
+                            <hr>
+                            <h5 class="card-title">Total: {{item.price}} </h5>
+                            <hr>
+                            <a href="{% url 'checkout' %}" class="" style="border: 1px solid grey; padding: 10px;background-color: white; color: black; border-radius: 12px; text-decoration: none;">Checkout</a>
+                            <br><br>
+                            <p>Do you have a Promo Code?</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    {% else %}
+    <div class="container" style="width: 100vw; position: relative; top: 6vh; height: 900px; display: flex; justify-content: center;">
+        <div class="conatiner_box width" style="display: flex; width: 100%; gap: 10px;">
+            <div class="left_div" style="width: 80%;">
+                <div class="left_top1" style="width: 100%; border: 1px solid #e5e5e5; padding: 20px; border-radius: 10px; background-color: #f8f8f8;">
+                    <h4 style="color: #333; font-size: 1.5rem; font-weight: bold;">Exclusive Benefits for Members</h4>
+                    <p style="color: #666; font-size: 1rem;">Unlock special perks by becoming a member. Enjoy fast and free delivery on all orders. Join us or sign in to experience the best shopping experience!</p>
+                </div>
+                <div class="left_top2">
+                    <h2>Bag</h2>
+                    {% if items_in_bag %}
+                        <!-- Display bag items -->
+                        {% for item in bag_items %}
+                            <p>{{ item.quantity }} x {{ item.product_name }} - ${{ item.total }}</p>
+                            <!-- Add more details if needed -->
+                        {% endfor %}
+                    {% else %}
+                        <!-- Display message when the bag is empty -->
+                        <h3>Your bag is empty</h3>
+                    {% endif %}
+                </div>
+            </div>
+            <div class="right_div" style="width: 40%;">
+                <div class="card">
+                    <div class="card-header">
+                        <h3>Summary</h3>
+                    </div>
+                    <div class="card-body">
+                        {% if items_in_bag %}
+                            <!-- Display summary when there are items in the bag -->
+                            <h5 class="card-title">Subtotal</h5>
+                            <p class="card-text">Estimated Delivery & Handling: Free</p>
+                            <hr>
+                            <h5 class="card-title">Total: ${{ total_price }}</h5>
+                            <hr>
+                            <a href="{% url 'checkout' %}" class="btn btn-primary" style="border-radius: 12px; text-decoration: none;">Checkout</a>
+                        {% else %}
+                            <!-- Display alternative content when the bag is empty -->
+                            <p>Your bag is currently empty. Explore our products and add items to your bag!</p>
+                        {% endif %}
+                        <br><br>
+                        <p>Do you have a Promo Code?</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    {% endif %}
+{% endblock %}
+
+
+
